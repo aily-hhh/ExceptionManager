@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,25 +30,18 @@ class MainActivity : AppCompatActivity() {
         applicationContext.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 intent?.apply {
-                    if (action == ExceptionLogManager.customIntentAction) {
+                    if (action == ExceptionLogManager.CUSTOM_INTENT_ACTION) {
                         Log.d("ExceptionIntentFilter", "MainActivity")
                     }
                 }
             }
         }, IntentFilter().apply {
-            addAction(ExceptionLogManager.customIntentAction)
+            addAction(ExceptionLogManager.CUSTOM_INTENT_ACTION)
         })
 
         lifecycleScope.launch(Dispatchers.IO) {
             ExceptionLogManager.exceptionHandler.collectLatest { data ->
                 data ?: return@collectLatest
-                val thread = data.thread
-                val throwableObject = data.throwable ?: Throwable()
-                var outString =
-                    "\"Exception name: $throwableObject; Thread name: $thread;\\n\""
-                throwableObject.stackTrace.forEach { traceObject ->
-                    outString += traceObject.toString() + "\n"
-                }
                 //Так сделано для демонстрации. Код выше работает.
                 Log.d("ExceptionResult", "MainActivity")
             }

@@ -1,29 +1,13 @@
 package com.example.exceptions.logManager
 
-import android.annotation.SuppressLint
 import android.content.Context
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class FileManager(
     private val context: Context,
     private val path: String? = null
 ) {
-
-    private var currentFileName = Calendar.getInstance().apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }.timeInMillis
-
-    @SuppressLint("SimpleDateFormat")
-    private val dateFormat = SimpleDateFormat("dd.MM.yyyy")
-
-    @SuppressLint("SimpleDateFormat")
-    private val timeFormat = SimpleDateFormat("HH:mm")
-
 
     private val countDay = 7
     private val dayInMilliseconds = 86400000L
@@ -42,7 +26,7 @@ class FileManager(
         }
     }
 
-    private fun filePath() : String {
+    private fun filePath(): String {
         return if (path.isNullOrEmpty()) {
             "${sdCardPath}/$directoryName/"
         } else {
@@ -63,7 +47,7 @@ class FileManager(
         return outList
     }
 
-    fun readFromFile(file: String = "$currentFileName"): String {
+    fun readFromFile(file: String): String? {
         try {
             File(filePath()).apply {
                 directoryFail = if (!exists()) !mkdir() else false
@@ -71,7 +55,7 @@ class FileManager(
         } catch (exception: java.lang.Exception) {
             directoryFail = true
         }
-        if (directoryFail) return "Ошибка создания каталога"
+        if (directoryFail) return null
         var returnString = ""
         File(filePath() + "/$file").apply {
             try {
@@ -79,19 +63,17 @@ class FileManager(
             } catch (ex: Exception) {
                 try {
                     createNewFile()
-                    readFromFile()
+                    readFromFile(file)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
+
         return returnString
     }
 
-    fun writeToFile(data: String) {
-        val oldFileData = readFromFile()
-        val dotString =
-            "\n-----------------------------${timeFormat.format(Calendar.getInstance().time)}-----------------------------\n"
-        File(filePath() + "$currentFileName").writeText(oldFileData + dotString + data)
+    fun writeToFile(data: String, fileName: String) {
+        File(filePath() + fileName).writeText(data)
     }
 }

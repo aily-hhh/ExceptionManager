@@ -52,4 +52,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.acra.core)
+    implementation(libs.acra.dialog)
+    implementation(libs.acra.notification)
+    implementation(libs.acra.advanced.scheduler)
+
+    implementation(libs.gson)
 }
