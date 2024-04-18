@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.io.File
 import java.util.Calendar
 
 class ExceptionLogManager(context: Context) {
@@ -27,14 +28,16 @@ class ExceptionLogManager(context: Context) {
     private val gson = Gson()
     private val listType = object : TypeToken<List<ExceptionData>>() {}.type
     private val calendar = Calendar.getInstance()
+    private val countDay = 7
+    private val dayInMilliseconds = 86400000L
 
     private val fileManager = FileManager(context)
-    private var currentFileName = Calendar.getInstance().apply {
+    private val currentFileName get() = Calendar.getInstance().apply {
         set(Calendar.HOUR_OF_DAY, 0)
         set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
-    }.timeInMillis.toString()
+    }.timeInMillis.toString() + ".json"
 
 
     companion object {
@@ -73,7 +76,11 @@ class ExceptionLogManager(context: Context) {
             }
         }
 
-        fileManager.cleanOldFiles()
+        fileManager.getFileListFromDirectory().forEach { currentFile ->
+            if (currentFile.toLong() / dayInMilliseconds > countDay) {
+                fileManager.deleteLocalFile(currentFileName)
+            }
+        }
     }
 
     private fun throwLastExceptionToDefaultHandler() {
