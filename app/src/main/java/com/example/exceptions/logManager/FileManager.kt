@@ -68,4 +68,12 @@ class FileManager(
         return if (file.exists()) file.deleteRecursively() else true
     }
 
+    fun getFileNameWithoutExtension(filePath: String): String {
+        val dotIndex = filePath.lastIndexOf(".")
+        if (dotIndex > 0) {
+            return filePath.substring(1, dotIndex)
+        }
+        return filePath.substring(1)
+    }
+
 }

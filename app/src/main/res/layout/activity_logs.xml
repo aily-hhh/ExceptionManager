@@ -5,16 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".LogsActivity">
+    android:background="@color/background"
+    tools:context=".logException.LogsActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="log"
+        android:text="@string/update"
+        android:layout_margin="16dp"
+        android:textSize="18sp"
+        android:backgroundTint="@color/button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_date"
+        android:layout_margin="16dp"
+        android:textSize="18sp"
+        android:backgroundTint="@color/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerExceptions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/buttonUpdate"
+        tools:listitem="@layout/item_exception" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
